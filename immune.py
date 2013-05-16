@@ -8,34 +8,30 @@ import json
 from expression import Expression, Operations
 
 
-class FitnessFunction:
+def FitnessFunction(exact_values):
     """
     Used for calculating fitness function for
     given expression.
     Value is simple Euclidean norm for vector.
-    """
 
-    def __init__(self, exact_values):
-        """
         Initializes function with the exact values of the needed function.
         Pass exact values in the following form:
         [({'x': 1, 'y': 1}, 0.125),
          ({'x': 2, 'y': 2}, 0.250)]
-        """
-        self.exact_values = exact_values
+    """
 
-    def expression_value(self, expression):
+    def expression_value(expression):#(expression, exact_values):
         """
         Returns value of the fitness function for given
         expression. The less the value - the closer expression to
         the unknown function.
         """
         sum = 0
-        for (variables, value) in self.exact_values:
+        for (variables, value) in exact_values:
             sum += ((expression.value_in_point(variables) - value) *
                     (expression.value_in_point(variables) - value))
         return math.sqrt(sum)
-
+    return expression_value#lambda (expression):expression_value(expression, exact_values)
 
 class ExpressionMutator:
     """
@@ -248,7 +244,7 @@ class ExpressionsImmuneSystem:
             else:
                 self.step()
             best = self.best()
-            if self.fitness_function.expression_value(best) <= accuracy:
+            if self.fitness_function(best) <= accuracy:
                 return return_best()
 
         return return_best()
@@ -297,7 +293,7 @@ class ExpressionsImmuneSystem:
         """
         fitness_values = []
         for (i, e) in enumerate(self.lymphocytes):
-            fitness_values.append((i, self.fitness_function.expression_value(e)))
+            fitness_values.append((i, self.fitness_function(e)))
         return sorted(fitness_values, key=lambda item: item[1])
 
 

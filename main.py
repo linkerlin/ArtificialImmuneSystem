@@ -39,7 +39,7 @@ if __name__ == "__main__":
                                                exchanger=exchanger,
                                                config=config)
         best = immuneSystem.solve()
-        results.append((f.expression_value(best), str(best)))
+        results.append((f(best), str(best)))
         update_progress(int((i + 1) / iterations * 100))
     end = time.clock()
     print('\n{0} seconds'.format(end - start))

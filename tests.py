@@ -159,7 +159,7 @@ class FitnessFunctionTest(unittest.TestCase):
                            left=Node(Operations.IDENTITY, value='y'),
                            right=Node(Operations.NUMBER, value=2)))
         e = Expression(root=answer, variables=['x', 'y'])
-        self.assertEqual(self.f.expression_value(e), 0.0)
+        self.assertEqual(self.f(e), 0.0)
 
     def test_wrong_value(self):
         wrong = Node(Operations.MINUS,
@@ -170,7 +170,7 @@ class FitnessFunctionTest(unittest.TestCase):
                           left=Node(Operations.IDENTITY, value='y'),
                           right=Node(Operations.NUMBER, value=2)))
         e = Expression(root=wrong, variables=['x', 'y'])
-        self.assertGreater(self.f.expression_value(e), 0.0)
+        self.assertGreater(self.f(e), 0.0)
 
 
 class ExpressionMutatorTest(unittest.TestCase):
@@ -226,4 +226,4 @@ class ExpressionsImmuneSystemTest(unittest.TestCase):
                                                exchanger=exchanger,
                                                config=config)
         best = immuneSystem.solve()
-        self.assertGreaterEqual(f.expression_value(best), 0)
+        self.assertGreaterEqual(f(best), 0)
