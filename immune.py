@@ -7,12 +7,14 @@ import json
 
 from expression import Expression, Operations
 
+
 class FitnessFunction:
     """
     Used for calculating fitness function for
     given expression.
     Value is simple Euclidean norm for vector.
     """
+
     def __init__(self, exact_values):
         """
         Initializes function with the exact values of the needed function.
@@ -39,6 +41,7 @@ class ExpressionMutator:
     """
     This class encapsulates all logic for mutating selected lymphocytes.
     """
+
     def __init__(self, expression):
         """
         Initializes mutator with the given expression.
@@ -140,9 +143,11 @@ class ExpressionMutator:
                 traverse_tree(node.left)
             if node.right is not None:
                 traverse_tree(node.right)
+
         traverse_tree(self.expression.root)
 
         return nodes
+
 
 class ExpressionsImmuneSystemConfig:
     """
@@ -192,6 +197,7 @@ class ExpressionsImmuneSystemConfig:
         json.dump(config, file)
         file.close()
 
+
 class ExpressionsImmuneSystem:
     """
     Class represents entire immune system.
@@ -216,8 +222,8 @@ class ExpressionsImmuneSystem:
         self.lymphocytes = []
         for i in range(0, self.config.number_of_lymphocytes):
             self.lymphocytes.append(Expression.generate_random(
-                                        self.config.maximal_height,
-                                        variables))
+                self.config.maximal_height,
+                variables))
 
         #Initialize Exchanger with the first generated lymphocytes
         self.exchanger.set_lymphocytes_to_exchange(self.lymphocytes[:])
@@ -229,6 +235,7 @@ class ExpressionsImmuneSystem:
         After defined number of steps returns the best lymphocyte as
         an answer.
         """
+
         def return_best():
             best = self.best()
             best.simplify()
@@ -293,11 +300,13 @@ class ExpressionsImmuneSystem:
             fitness_values.append((i, self.fitness_function.expression_value(e)))
         return sorted(fitness_values, key=lambda item: item[1])
 
+
 class DataFileStorageHelper:
     """
     This helper class is used for storing exact function values in file and
     retrieving them.
     """
+
     @classmethod
     def save_to_file(cls, filename, variables, function, points_number,
                      min_point=-5.0, max_point=5.0):
@@ -313,14 +322,14 @@ class DataFileStorageHelper:
         output = open(filename, 'w')
         for arg in variables:
             #print(arg, end=' ', file=output)
-            output.write(arg+" ")
-        #print(file=output)
+            output.write(arg + " ")
+            #print(file=output)
         output.write("\n")
         for (arg, f) in values:
             for var in variables:
                 #print(arg[var], end=' ', file=output)
-                output.write(arg[var]+" ")
-            #print(f, file=output)
+                output.write(arg[var] + " ")
+                #print(f, file=output)
             output.write(f)
         output.close()
 

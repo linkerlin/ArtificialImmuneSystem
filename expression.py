@@ -3,7 +3,9 @@ __author__ = 'Stanislav Ushakov'
 import random
 import math
 
+
 class NotSupportedOperationError(Exception): pass
+
 
 class Operation:
     """
@@ -14,6 +16,7 @@ class Operation:
     action - function that returns result of this operation (1 or 2 arguments)
     string_representation - for printing expressions
     """
+
     def __init__(self, operation_type, action, string_representation=''):
         self._operation_type = operation_type
         self.action = action
@@ -23,13 +26,13 @@ class Operation:
         return self._operation_type == Operations._number
 
     def is_variable(self):
-        return  self._operation_type == Operations._variable
+        return self._operation_type == Operations._variable
 
     def is_unary(self):
-        return  self._operation_type == Operations._unary_operation
+        return self._operation_type == Operations._unary_operation
 
     def is_binary(self):
-        return  self._operation_type == Operations._binary_operation
+        return self._operation_type == Operations._binary_operation
 
     #ugly stuff for serializing
 
@@ -40,10 +43,10 @@ class Operation:
         Because of problems with pickle, have to override this method.
         """
         if self._operation_type == Operations._number:
-            return {self._dict_key : 'number'}
+            return {self._dict_key: 'number'}
         if self._operation_type == Operations._variable:
-            return {self._dict_key : 'variable'}
-        return {self._dict_key : self.string_representation}
+            return {self._dict_key: 'variable'}
+        return {self._dict_key: self.string_representation}
 
     def __setstate__(self, state):
         """
@@ -73,6 +76,7 @@ class Operation:
         if hasattr(operation, 'string_representation'):
             self.string_representation = operation.string_representation
 
+
 class Operations:
     """
     Class represents all possible operations.
@@ -86,9 +90,9 @@ class Operations:
                        action=(lambda x: x))
     IDENTITY = Operation(operation_type=_variable,
                          action=(lambda x: x))
-    PLUS =  Operation(operation_type=_binary_operation,
-                      action=(lambda x, y: x + y),
-                      string_representation='+')
+    PLUS = Operation(operation_type=_binary_operation,
+                     action=(lambda x, y: x + y),
+                     string_representation='+')
     MINUS = Operation(operation_type=_binary_operation,
                       action=(lambda x, y: x - y),
                       string_representation='-')
@@ -120,6 +124,7 @@ class Operations:
         """
         return [Operations.PLUS, Operations.MINUS, Operations.MULTIPLICATION, Operations.DIVISION]
 
+
 class Node:
     """
     This class is used for representing node of the expression tree.
@@ -128,6 +133,7 @@ class Node:
     value - contains number if operation = NUMBER or variable name if
     operation = IDENTITY
     """
+
     def __init__(self, operation, left=None, right=None, value=None):
         """
         Initializes node of the expression tree.
@@ -159,7 +165,7 @@ class Node:
             return self.operation.action(self.left.value_in_point(values))
 
         return self.operation.action(self.left.value_in_point(values),
-            self.right.value_in_point(values))
+                                     self.right.value_in_point(values))
 
     def height(self):
         """
@@ -171,7 +177,7 @@ class Node:
             return self.left.height() if self.left is not None else 0 + 1
 
         return max(self.left.height() if self.left is not None else 0,
-            self.right.height() if self.right is not None else 0) + 1
+                   self.right.height() if self.right is not None else 0) + 1
 
     def is_number(self):
         """
@@ -220,7 +226,7 @@ class Node:
 
         #calculate binary function for two numbers
         if (self.is_binary() and self.left.is_number() and
-            self.right.is_number()):
+                self.right.is_number()):
             self.value = self.value_in_point({})
             self.operation = Operations.NUMBER
             self.left = self.right = None
@@ -228,8 +234,8 @@ class Node:
 
         #calculate x / x
         if (self.is_binary() and
-            self.left.is_variable() and self.right.is_variable() and
-            self.left.value == self.right.value and self.operation == Operations.DIVISION):
+                self.left.is_variable() and self.right.is_variable() and
+                    self.left.value == self.right.value and self.operation == Operations.DIVISION):
             self.value = 1
             self.operation = Operations.NUMBER
             self.left = self.right = None
@@ -237,8 +243,8 @@ class Node:
 
         #calculate x - x
         if (self.is_binary() and
-            self.left.is_variable() and self.right.is_variable() and
-            self.left.value == self.right.value and self.operation == Operations.MINUS):
+                self.left.is_variable() and self.right.is_variable() and
+                    self.left.value == self.right.value and self.operation == Operations.MINUS):
             self.value = 0
             self.operation = Operations.NUMBER
             self.left = self.right = None
@@ -246,16 +252,16 @@ class Node:
 
         #calculate x * 1 and x / 1
         if (self.is_binary() and
-            self.right.is_number() and abs(self.right.value - 1) < accuracy and
-            (self.operation == Operations.DIVISION or self.operation == Operations.MULTIPLICATION)):
+                self.right.is_number() and abs(self.right.value - 1) < accuracy and
+                (self.operation == Operations.DIVISION or self.operation == Operations.MULTIPLICATION)):
             self._init_with_node(self.left)
             self.simplify()
             return True
 
         #calculate 1 * x
         if (self.is_binary() and
-            self.left.is_number() and abs(self.left.value - 1) < accuracy and
-            self.operation == Operations.MULTIPLICATION):
+                self.left.is_number() and abs(self.left.value - 1) < accuracy and
+                    self.operation == Operations.MULTIPLICATION):
             self._init_with_node(self.right)
             self.simplify()
             return True
@@ -286,12 +292,12 @@ class Node:
             return str(self.value)
 
         if self.is_unary():
-            return self.operation.string_representation + '(' +\
+            return self.operation.string_representation + '(' + \
                    (str(self.left) if self.left is not None else 'None') + ')'
 
         if self.is_binary():
-            return '(' + (str(self.left) if self.left is not None else 'None') +\
-                   ' ' + self.operation.string_representation + ' ' +\
+            return '(' + (str(self.left) if self.left is not None else 'None') + \
+                   ' ' + self.operation.string_representation + ' ' + \
                    (str(self.right) if self.right is not None else 'None') + ')'
 
     def __repr__(self):
@@ -333,6 +339,7 @@ class Node:
         if self._right_node_dict_key in state:
             self.right = Node(Operations.NUMBER)
             self.right.__setstate__(state[self._right_node_dict_key])
+
 
 class Expression:
     """
@@ -398,6 +405,7 @@ class Expression:
 
         #turn all leaves into numbers or variables
         leaves = []
+
         def traverse_tree(node):
             if node.is_number() or node.is_variable():
                 return
@@ -413,6 +421,7 @@ class Expression:
                     traverse_tree(node.left)
                 if node.right is not None:
                     traverse_tree(node.right)
+
         traverse_tree(root)
 
         for node in leaves:

@@ -1,8 +1,10 @@
 __author__ = 'Stanislav Ushakov'
 
+import sys
+
 from immune import ExpressionsImmuneSystem, DataFileStorageHelper, ExpressionsImmuneSystemConfig
 from exchanger import PeerToPeerExchanger, LocalhostNodesManager
-import sys
+
 
 #start as "python node_main.py node_num number_of_nodes"
 if __name__ == '__main__':
@@ -23,8 +25,8 @@ if __name__ == '__main__':
 
     results = []
     immuneSystem = ExpressionsImmuneSystem(exact_values=values,
-            variables=variables,
-            exchanger=exchanger,
-            config=config)
+                                           variables=variables,
+                                           exchanger=exchanger,
+                                           config=config)
     best = immuneSystem.solve()
     print(best)

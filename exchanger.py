@@ -5,11 +5,13 @@ from SocketServer import BaseRequestHandler, TCPServer
 import socket
 import pickle
 
+
 class SimpleRandomExchanger:
     """
     Class represents simple exchanger that simulates communicating wth the other
     nodes. Simply returns randomly generated lymphocytes.
     """
+
     def __init__(self, generator):
         self.generator = generator
 
@@ -27,11 +29,13 @@ class SimpleRandomExchanger:
         """
         return self.generator()
 
+
 class LocalhostNodesManager:
     """
     This class is used for getting information about other running nodes.
     This class simply returns ports on current machine.
     """
+
     def __init__(self, node_number, all_nodes):
         """
         Initializes manager with the number of the current node and number of
@@ -41,8 +45,8 @@ class LocalhostNodesManager:
         self.base_port = 5000
         self.self_port = self.base_port + node_number
         self.other_nodes = [(self.self_host, p)
-                       for p in range(self.base_port + 1, self.base_port + all_nodes + 1)
-                       if p != self.self_port]
+                            for p in range(self.base_port + 1, self.base_port + all_nodes + 1)
+                            if p != self.self_port]
         self.other_nodes_len = all_nodes - 1
         self.current_node = 0
 
@@ -61,6 +65,7 @@ class LocalhostNodesManager:
         self.current_node = (self.current_node + 1) % self.other_nodes_len
         return result
 
+
 class TCPHandler(BaseRequestHandler):
     """
     The RequestHandler class for this node.
@@ -74,11 +79,13 @@ class TCPHandler(BaseRequestHandler):
         self.request.recv(1024)
         self.request.sendall(pickle.dumps(self.server.lymphocytes_getter()))
 
+
 class ServerThread(Thread):
     """
     This Thread class is used for keeping always open socket for incoming
     connections. This thread must send currently storing lymphocytes.
     """
+
     def __init__(self, host, port, lymphocytes_getter):
         """
         Initializes thread with host and port that this node is listening for,
@@ -99,10 +106,12 @@ class ServerThread(Thread):
         #runs forever - so make this thread daemon
         server.serve_forever()
 
+
 class GetterThread(Thread):
     """
     This Thread class is used for getting lymphocytes from another node.
     """
+
     def __init__(self, node_address, lymphocytes_setter):
         """
         Initializes thread with the address of node being requested and
@@ -118,7 +127,7 @@ class GetterThread(Thread):
         and call setter function.
         """
         try:
-            sock =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect(self.address)
 
             #send dummy data
@@ -144,6 +153,7 @@ class PeerToPeerExchanger:
     provided by special manager object. Connect to one of this nodes and ask
     for lymphocytes.
     """
+
     def __init__(self, nodes_manager):
         """
         Initializes exchanger with the host and port of this node.

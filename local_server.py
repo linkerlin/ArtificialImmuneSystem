@@ -10,6 +10,7 @@ if __name__ == '__main__':
 
     def done(p):
         return p.poll() is not None
+
     def success(p):
         return p.returncode == 0
 
