@@ -348,7 +348,7 @@ class Expression:
         return (random.random() - 0.5) * 200
 
     @classmethod
-    def generate_operator(cls, only_binary:bool=False):
+    def generate_operator(cls, only_binary=False):
         """
         Returns randomly selected allowed operations.
         The possibility of a binary operation is higher than possibility

@@ -1,7 +1,7 @@
 __author__ = 'Stanislav Ushakov'
 
 from threading import Thread, Lock
-from socketserver import BaseRequestHandler, TCPServer
+from SocketServer import BaseRequestHandler, TCPServer
 import socket
 import pickle
 

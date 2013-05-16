@@ -22,7 +22,7 @@ class FitnessFunction:
         """
         self.exact_values = exact_values
 
-    def expression_value(self, expression:Expression):
+    def expression_value(self, expression):
         """
         Returns value of the fitness function for given
         expression. The less the value - the closer expression to
@@ -39,7 +39,7 @@ class ExpressionMutator:
     """
     This class encapsulates all logic for mutating selected lymphocytes.
     """
-    def __init__(self, expression:Expression):
+    def __init__(self, expression):
         """
         Initializes mutator with the given expression.
         NOTE: expression itself won't be changed. Instead of its
@@ -312,12 +312,16 @@ class DataFileStorageHelper:
             values.append((arg_dict, function(*arg_dict.values())))
         output = open(filename, 'w')
         for arg in variables:
-            print(arg, end=' ', file=output)
-        print(file=output)
+            #print(arg, end=' ', file=output)
+            output.write(arg+" ")
+        #print(file=output)
+        output.write("\n")
         for (arg, f) in values:
             for var in variables:
-                print(arg[var], end=' ', file=output)
-            print(f, file=output)
+                #print(arg[var], end=' ', file=output)
+                output.write(arg[var]+" ")
+            #print(f, file=output)
+            output.write(f)
         output.close()
 
     @classmethod

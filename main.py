@@ -7,11 +7,11 @@ from expression import Expression
 from immune import ExpressionsImmuneSystem, FitnessFunction, DataFileStorageHelper, ExpressionsImmuneSystemConfig
 from exchanger import SimpleRandomExchanger
 
-def update_progress(progress:int):
+def update_progress(progress):
     """
     Shows progress bar. Progress is passed in percent.
     """
-    print('\r[{0}] {1}%'.format('#' * (progress // 10), progress), end='')
+    print '\r[{0}] {1}%'.format('#' * (progress // 10), progress)
 
 if __name__ == "__main__":
     number_of_lymphocytes = 100
@@ -42,4 +42,4 @@ if __name__ == "__main__":
     end = time.clock()
     print('\n{0} seconds'.format(end - start))
     for result in sorted(results):
-        print(result, sep='\n')
+        print result
