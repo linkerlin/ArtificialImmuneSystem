@@ -322,15 +322,16 @@ class DataFileStorageHelper:
         output = open(filename, 'w')
         for arg in variables:
             #print(arg, end=' ', file=output)
-            output.write(arg + " ")
+            output.write(str(arg) + " ")
             #print(file=output)
         output.write("\n")
         for (arg, f) in values:
             for var in variables:
                 #print(arg[var], end=' ', file=output)
-                output.write(arg[var] + " ")
-                #print(f, file=output)
-            output.write(f)
+                output.write(str(arg[var]) + " ")
+
+            #print(f, file=output)
+            output.write(str(f))
         output.close()
 
     @classmethod
